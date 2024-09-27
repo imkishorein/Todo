@@ -1,11 +1,28 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useSession } from "next-auth/react";
 import { Button } from "./ui/button";
 import { Input } from "./ui/input";
 import { Checkbox } from "./ui/checkbox";
 
 const TodoList = () => {
+    const { data: session } = useSession();
     const [todos, setTodos] = useState([]);
     const [newTodo, setNewTodo] = useState('');
+
+    useEffect(() => {
+        // Load todos from localStorage when component mounts
+        if (session?.user?.email) {
+            const storedTodos = JSON.parse(localStorage.getItem(session.user.email) || '[]');
+            setTodos(storedTodos);
+        }
+    }, [session]);
+
+    useEffect(() => {
+        // Save todos to localStorage whenever they change
+        if (session?.user?.email) {
+            localStorage.setItem(session.user.email, JSON.stringify(todos));
+        }
+    }, [todos, session]);
 
     const addTodo = () => {
         if (newTodo.trim() !== '') {
@@ -25,9 +42,11 @@ const TodoList = () => {
         setTodos(newTodos);
     };
 
+    if (!session) return null;
+
     return (
-        <div className="w-full max-w-md mx-auto p-6 bg-white rounded-lg shadow-md">
-            <h1 className="text-2xl font-bold mb-4">Todo List</h1>
+        <div className="w-full">
+            <h2 className="text-xl font-bold mb-4">Your Todos</h2>
             <div className="flex mb-4">
                 <Input
                     type="text"

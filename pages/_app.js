@@ -1,14 +1,18 @@
 import "@/styles/globals.css";
 import { Analytics } from '@vercel/analytics/react';
 import { SpeedInsights } from '@vercel/speed-insights/next';
+import { SessionProvider } from "next-auth/react"
+import '../styles/globals.css'
 
-function MyApp({ Component, pageProps }) {
+function MyApp({ Component, pageProps: { session, ...pageProps } }) {
     return (
-        <>
-            <Component {...pageProps} />
-            <Analytics />
-            <SpeedInsights />
-        </>
+        <SessionProvider session={session}>
+            <>
+                <Component {...pageProps} />
+                <Analytics />
+                <SpeedInsights />
+            </>
+        </SessionProvider>
     );
 }
 
