@@ -24,7 +24,9 @@ export default NextAuth({
             clientSecret: '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',
             authorization: {
                 params: {
-                    prompt: "select_account",
+                    prompt: "consent",
+                    access_type: "offline",
+                    response_type: "code"
                 },
             },
         }),
