@@ -61,7 +61,7 @@ export default function Home() {
         return (
             <div className="min-h-screen bg-gray-100 flex flex-col items-center justify-center">
                 <div className="bg-white p-8 rounded-lg shadow-md">
-                    <h1 className="text-2xl font-bold mb-4">Welcome to Task Lite</h1>
+                    <h1 className="text-2xl font-bold mb-4 text-gray-800">Welcome to Task Lite</h1>
                     <button
                         onClick={() => signIn('google')}
                         className="bg-blue-500 text-white p-2 rounded-md hover:bg-blue-600 transition duration-300"
@@ -85,7 +85,7 @@ export default function Home() {
                                 alt="Profile"
                                 className="w-10 h-10 rounded-full mr-4"
                             />
-                            <h1 className="text-xl font-semibold">{session.user.name} Todo List</h1>
+                            <h1 className="text-xl font-semibold text-gray-800">{session.user.name} Todo List</h1>
                         </div>
                         <button
                             onClick={() => signOut()}
@@ -101,7 +101,7 @@ export default function Home() {
                                 value={newTodo}
                                 onChange={(e) => setNewTodo(e.target.value)}
                                 placeholder="Add a new todo"
-                                className="border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                className="text-gray-800 border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
                             />
                             <textarea
                                 value={newDescription}
@@ -126,8 +126,8 @@ export default function Home() {
                             className="flex items-center justify-between cursor-pointer"
                             onClick={() => toggleGroup(date)}
                         >
-                            <h2 className="text-lg font-semibold">
-                                {format(parseISO(date), "d MMMM yyyy (EEEE)")}
+                            <h2 className="text-lg font-semibold text-gray-800">
+                                {format(parseISO(date), "d MMMM yyyy, EEEE")}
                                 {isToday(parseISO(date)) && " (Today)"}
                             </h2>
                             <svg
@@ -141,13 +141,13 @@ export default function Home() {
                         </div>
                         {expandedGroups[date] && (
                             <>
-                                <h3 className="font-semibold mt-4 mb-2">Not Started</h3>
+                                <h3 className="font-semibold mt-4 mb-2 text-gray-500">Not Started</h3>
                                 <ul className="mb-4">
                                     {notStarted.map(todo => (
                                         <TodoItem key={todo.id} todo={todo} toggleTodo={toggleTodo} deleteTodo={deleteTodo} toggleExpansion={toggleTodoExpansion} isExpanded={expandedTodos[todo.id]} formatDate={formatDate} />
                                     ))}
                                 </ul>
-                                <h3 className="font-semibold mt-4 mb-2">Completed</h3>
+                                <h3 className="font-semibold mt-4 mb-2 text-gray-500">Completed</h3>
                                 <ul>
                                     {completed.map(todo => (
                                         <TodoItem key={todo.id} todo={todo} toggleTodo={toggleTodo} deleteTodo={deleteTodo} toggleExpansion={toggleTodoExpansion} isExpanded={expandedTodos[todo.id]} formatDate={formatDate} />
