@@ -15,9 +15,13 @@ const TodoItem = ({ todo, toggleTodo, deleteTodo, toggleExpansion, isExpanded, u
     };
 
     const handleDescriptionSubmit = () => {
+        console.log("Submitting description:", description); // Log the description
         if (description.trim()) {
+            console.log("Updating todo description for ID:", todo.id); // Log the todo ID
             updateTodoDescription(todo.id, description);
             closeBottomSheet();
+        } else {
+            console.log("No description provided");
         }
     };
 
