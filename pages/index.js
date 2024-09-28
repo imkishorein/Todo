@@ -107,7 +107,7 @@ export default function Home() {
                                 value={newDescription}
                                 onChange={(e) => setNewDescription(e.target.value)}
                                 placeholder="Add a description (optional)"
-                                className="border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                className="border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-800"
                                 rows="3"
                             />
                             <button
