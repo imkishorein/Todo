@@ -57,7 +57,7 @@ export default function Home() {
                                 alt="Profile"
                                 className="w-10 h-10 rounded-full mr-4"
                             />
-                            <h1 className="text-xl font-semibold">{session.user.name}'s Todo List</h1>
+                            <h1 className="text-xl font-semibold">{session.user.name}-s Todo List</h1>
                         </div>
                         <button
                             onClick={() => signOut()}
