@@ -20,8 +20,8 @@ import GoogleProvider from 'next-auth/providers/google';
 export default NextAuth({
     providers: [
         GoogleProvider({
-            clientId: process.env.GOOGLE_CLIENT_ID,
-            clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+            clientId: '558985239679-vetljc3n1berjolmgj228fupvgbke4fv.apps.googleusercontent.com',
+            clientSecret: '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',
             authorization: {
                 params: {
                     prompt: "select_account",
