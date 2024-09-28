@@ -3,6 +3,12 @@ import { useSession, signIn, signOut } from "next-auth/react"
 import useTodos from '../hooks/useTodos';
 import { format, parseISO, isToday } from 'date-fns';
 
+const Footer = () => (
+    <h6 className="text-xs text-center text-gray-500 mt-8 pb-4">
+        Built with ❤️ by Kishore. Powered by AI 🤖, fueled by coffee ☕️
+    </h6>
+);
+
 export default function Home() {
     const { data: session } = useSession()
     const { todos, addTodo, toggleTodo, deleteTodo } = useTodos();
@@ -53,9 +59,9 @@ export default function Home() {
 
     if (!session) {
         return (
-            <div className="min-h-screen bg-gray-100 flex items-center justify-center">
+            <div className="min-h-screen bg-gray-100 flex flex-col items-center justify-center">
                 <div className="bg-white p-8 rounded-lg shadow-md">
-                    <h1 className="text-2xl font-bold mb-4">Welcome to Todoist-like App</h1>
+                    <h1 className="text-2xl font-bold mb-4">Welcome to Task Lite</h1>
                     <button
                         onClick={() => signIn('google')}
                         className="bg-blue-500 text-white p-2 rounded-md hover:bg-blue-600 transition duration-300"
@@ -63,13 +69,14 @@ export default function Home() {
                         Sign in with Google
                     </button>
                 </div>
+                <Footer />
             </div>
         )
     }
 
     return (
-        <div className="min-h-screen bg-gray-100 p-4">
-            <div className="max-w-4xl mx-auto">
+        <div className="min-h-screen bg-gray-100 p-4 flex flex-col">
+            <div className="max-w-4xl mx-auto flex-grow">
                 <div className="bg-white rounded-lg shadow-md p-6 mb-6">
                     <div className="flex items-center justify-between mb-6">
                         <div className="flex items-center">
@@ -151,6 +158,7 @@ export default function Home() {
                     </div>
                 ))}
             </div>
+            <Footer />
         </div>
     );
 }
