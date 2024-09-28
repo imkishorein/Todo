@@ -1,16 +1,24 @@
 import { useState } from 'react';
-import { Dialog } from '@headlessui/react';
+import { format } from 'date-fns';
+import BottomSheet from './BottomSheet'; // Adjust the path if necessary
 
-const TodoItem = ({ todo, toggleTodo, deleteTodo, toggleExpansion, isExpanded, formatDate, updateTodoDescription }) => {
-    const [isBottomSheetOpen, setIsBottomSheetOpen] = useState(false);
-    const [newDescription, setNewDescription] = useState('');
+const TodoItem = ({ todo, toggleTodo, deleteTodo, toggleExpansion, isExpanded, updateTodoDescription }) => {
+    const [isBottomSheetOpen, setBottomSheetOpen] = useState(false);
+    const [description, setDescription] = useState(todo.description || '');
 
-    const openBottomSheet = () => setIsBottomSheetOpen(true);
-    const closeBottomSheet = () => setIsBottomSheetOpen(false);
+    const openBottomSheet = () => {
+        setBottomSheetOpen(true);
+    };
 
-    const handleSubmitDescription = () => {
-        updateTodoDescription(todo.id, newDescription);
-        closeBottomSheet();
+    const closeBottomSheet = () => {
+        setBottomSheetOpen(false);
+    };
+
+    const handleDescriptionSubmit = () => {
+        if (description.trim()) {
+            updateTodoDescription(todo.id, description);
+            closeBottomSheet();
+        }
     };
 
     return (
@@ -27,8 +35,8 @@ const TodoItem = ({ todo, toggleTodo, deleteTodo, toggleExpansion, isExpanded, f
                         {todo.text}
                     </span>
                     <p className="text-xs text-gray-500 mt-1">
-                        Created: {formatDate(todo.createdAt)}
-                        {todo.completed && ` • Completed: ${formatDate(todo.completedAt)}`}
+                        Created: {format(new Date(todo.createdAt), "EEEE, d MMMM yyyy")}
+                        {todo.completed && ` • Completed: ${format(new Date(todo.completedAt), "EEEE, d MMMM yyyy")}`}
                     </p>
                 </div>
                 <button
@@ -50,60 +58,40 @@ const TodoItem = ({ todo, toggleTodo, deleteTodo, toggleExpansion, isExpanded, f
             </div>
 
             {isExpanded && (
-                <div className="mt-2">
-                    {!todo.description ? (
-                        <div className="flex flex-col items-center">
+                <>
+                    {todo.description ? (
+                        <div className="mt-2">
+                            <div className="border-dotted border-t border-gray-300 pt-2">
+                                {todo.description}
+                            </div>
+                        </div>
+                    ) : (
+                        <div className="flex flex-col items-center justify-center mt-4">
                             <img
-                                src="https://undraw.co/illustration-url"
-                                alt="No Description Illustration"
-                                className="w-32 h-32 mb-4"
+                                src="https://some-free-illustration-url.com/illustration.png" // Replace with a valid URL
+                                alt="No description"
+                                className="w-48 h-48 object-contain"
                             />
-                            <p className="text-gray-500 mb-4">No description found</p>
+                            <p className="text-gray-600 mt-4">No description found</p>
                             <button
                                 onClick={openBottomSheet}
-                                className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 transition duration-300"
+                                className="mt-2 bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 transition duration-300"
                             >
                                 Add Description
                             </button>
                         </div>
-                    ) : (
-                        <div>
-                            <div className="border-t-2 border-dotted border-gray-300 mt-2 mb-2"></div>
-                            <div className="ml-8 text-sm text-gray-600">
-                                {todo.description}
-                            </div>
-                        </div>
                     )}
-                </div>
+                </>
             )}
 
             {isBottomSheetOpen && (
-                <Dialog open={isBottomSheetOpen} onClose={closeBottomSheet} className="fixed inset-0 flex items-end justify-center">
-                    <div className="bg-white rounded-t-lg p-6 shadow-lg w-full max-w-md">
-                        <Dialog.Title className="text-lg font-semibold text-gray-800">Add Description</Dialog.Title>
-                        <textarea
-                            value={newDescription}
-                            onChange={(e) => setNewDescription(e.target.value)}
-                            placeholder="Enter a description"
-                            className="w-full border border-gray-300 rounded-md p-2 mt-4"
-                            rows="3"
-                        />
-                        <div className="flex justify-end mt-4">
-                            <button
-                                onClick={handleSubmitDescription}
-                                className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 transition duration-300"
-                            >
-                                Save
-                            </button>
-                            <button
-                                onClick={closeBottomSheet}
-                                className="ml-2 text-gray-500 hover:text-gray-700"
-                            >
-                                Cancel
-                            </button>
-                        </div>
-                    </div>
-                </Dialog>
+                <BottomSheet
+                    todoId={todo.id}
+                    description={description}
+                    setDescription={setDescription}
+                    onClose={closeBottomSheet}
+                    onSubmit={handleDescriptionSubmit}
+                />
             )}
         </li>
     );

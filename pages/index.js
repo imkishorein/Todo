@@ -49,6 +49,7 @@ export default function Home() {
         );
     };
 
+
     const groupedTodos = todos.reduce((groups, todo) => {
         const date = format(parseISO(todo.createdAt), 'yyyy-MM-dd');
         if (!groups[date]) {
