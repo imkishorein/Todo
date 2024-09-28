@@ -21,8 +21,15 @@ const useTodos = () => {
         }
     }, [todos, session]);
 
-    const addTodo = (text) => {
-        setTodos([...todos, { id: Date.now(), text, completed: false, createdAt: new Date().toISOString(), completedAt: null }]);
+    const addTodo = (text, description) => {
+        setTodos([...todos, {
+            id: Date.now(),
+            text,
+            description,
+            completed: false,
+            createdAt: new Date().toISOString(),
+            completedAt: null
+        }]);
     };
 
     const toggleTodo = (id) => {
