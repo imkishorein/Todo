@@ -8,7 +8,7 @@ const BottomSheet = ({ todoId, description, setDescription, onClose, onSubmit })
                 value={description}
                 onChange={(e) => setDescription(e.target.value)}
                 placeholder="Enter description"
-                className="w-full p-2 border border-gray-300 rounded-md"
+                className="w-full p-2 border border-gray-300 rounded-md text-gray-800"
                 rows="4"
             />
             <div className="flex justify-end mt-4">

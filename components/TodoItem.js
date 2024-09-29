@@ -1,8 +1,8 @@
 import { useState } from 'react';
 import { format } from 'date-fns';
-import BottomSheet from './BottomSheet'; // Adjust the path if necessary
+import BottomSheet from './BottomSheet';
 
-const TodoItem = ({ todo, toggleTodo, deleteTodo, toggleExpansion, isExpanded, updateTodoDescription }) => {
+const TodoItem = ({ todo, toggleTodo, deleteTodo, toggleExpansion, isExpanded, formatDate, updateTodoDescription }) => {
     const [isBottomSheetOpen, setBottomSheetOpen] = useState(false);
     const [description, setDescription] = useState(todo.description || '');
 
@@ -15,13 +15,9 @@ const TodoItem = ({ todo, toggleTodo, deleteTodo, toggleExpansion, isExpanded, u
     };
 
     const handleDescriptionSubmit = () => {
-        console.log("Submitting description:", description); // Log the description
         if (description.trim()) {
-            console.log("Updating todo description for ID:", todo.id); // Log the todo ID
-            updateTodoDescription(todo.id, description);
+            updateTodoDescription(todo.id, description.trim());
             closeBottomSheet();
-        } else {
-            console.log("No description provided");
         }
     };
 
@@ -39,8 +35,8 @@ const TodoItem = ({ todo, toggleTodo, deleteTodo, toggleExpansion, isExpanded, u
                         {todo.text}
                     </span>
                     <p className="text-xs text-gray-500 mt-1">
-                        Created: {format(new Date(todo.createdAt), "EEEE, d MMMM yyyy")}
-                        {todo.completed && ` • Completed: ${format(new Date(todo.completedAt), "EEEE, d MMMM yyyy")}`}
+                        Created: {formatDate(todo.createdAt)}
+                        {todo.completed && todo.completedAt && ` • Completed: ${formatDate(todo.completedAt)}`}
                     </p>
                 </div>
                 <button
@@ -65,17 +61,23 @@ const TodoItem = ({ todo, toggleTodo, deleteTodo, toggleExpansion, isExpanded, u
                 <>
                     {todo.description ? (
                         <div className="mt-2">
-                            <div className="border-dotted border-t border-gray-300 pt-2">
+                            <div className="border-dotted border-t border-gray-300 pt-2 text-gray-500">
                                 {todo.description}
                             </div>
+                            <button
+                                onClick={openBottomSheet}
+                                className="mt-2 text-blue-500 hover:text-blue-600 transition duration-300"
+                            >
+                                Edit Description
+                            </button>
                         </div>
                     ) : (
                         <div className="flex flex-col items-center justify-center mt-4">
-                            <img
-                                src="https://some-free-illustration-url.com/illustration.png" // Replace with a valid URL
-                                alt="No description"
-                                className="w-48 h-48 object-contain"
-                            />
+                            {/*<img*/}
+                            {/*    src="/api/placeholder/200/200"*/}
+                            {/*    alt="No description"*/}
+                            {/*    className="w-48 h-48 object-contain"*/}
+                            {/*/>*/}
                             <p className="text-gray-600 mt-4">No description found</p>
                             <button
                                 onClick={openBottomSheet}

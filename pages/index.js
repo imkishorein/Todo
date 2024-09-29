@@ -3,6 +3,8 @@ import { useSession, signIn, signOut } from "next-auth/react";
 import useTodos from '../hooks/useTodos';
 import { format, parseISO, isToday } from 'date-fns';
 import TodoItem from '../components/TodoItem';
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
 
 const Footer = () => (
     <h6 className="text-xs text-center text-gray-500 mt-8 pb-4">
@@ -12,9 +14,10 @@ const Footer = () => (
 
 export default function Home() {
     const { data: session } = useSession();
-    const { todos, addTodo, toggleTodo, deleteTodo, setTodos } = useTodos();
+    const { todos, addTodo, toggleTodo, deleteTodo, updateTodoDescription, updateTodoDate } = useTodos();
     const [newTodo, setNewTodo] = useState('');
     const [newDescription, setNewDescription] = useState('');
+    const [newDate, setNewDate] = useState(new Date());
     const [expandedGroups, setExpandedGroups] = useState({});
     const [expandedTodos, setExpandedTodos] = useState({});
 
@@ -27,9 +30,10 @@ export default function Home() {
     const handleSubmit = (e) => {
         e.preventDefault();
         if (newTodo.trim()) {
-            addTodo(newTodo.trim(), newDescription.trim());
+            addTodo(newTodo.trim(), newDescription.trim(), newDate);
             setNewTodo('');
             setNewDescription('');
+            setNewDate(new Date());
         }
     };
 
@@ -41,17 +45,8 @@ export default function Home() {
         setExpandedTodos(prev => ({ ...prev, [id]: !prev[id] }));
     };
 
-    const updateTodoDescription = (id, description) => {
-        setTodos((prevTodos) =>
-            prevTodos.map((todo) =>
-                todo.id === id ? { ...todo, description } : todo
-            )
-        );
-    };
-
-
     const groupedTodos = todos.reduce((groups, todo) => {
-        const date = format(parseISO(todo.createdAt), 'yyyy-MM-dd');
+        const date = format(parseISO(todo.date), 'yyyy-MM-dd');
         if (!groups[date]) {
             groups[date] = { completed: [], notStarted: [] };
         }
@@ -86,7 +81,7 @@ export default function Home() {
 
     return (
         <div className="min-h-screen bg-gray-100 p-4 flex flex-col">
-            <div className="max-w-4xl mx-auto flex-grow">
+            <div className="max-w-7xl mx-auto flex-grow">
                 <div className="bg-white rounded-lg shadow-md p-6 mb-6">
                     <div className="flex items-center justify-between mb-6">
                         <div className="flex items-center">
@@ -119,6 +114,11 @@ export default function Home() {
                                 placeholder="Add a description (optional)"
                                 className="border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-800"
                                 rows="3"
+                            />
+                            <DatePicker
+                                selected={newDate}
+                                onChange={(date) => setNewDate(date)}
+                                className="border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-800"
                             />
                             <button
                                 type="submit"
@@ -163,6 +163,7 @@ export default function Home() {
                                             isExpanded={expandedTodos[todo.id]}
                                             formatDate={formatDate}
                                             updateTodoDescription={updateTodoDescription}
+                                            updateTodoDate={updateTodoDate}
                                         />
                                     ))}
                                 </ul>
@@ -178,6 +179,7 @@ export default function Home() {
                                             isExpanded={expandedTodos[todo.id]}
                                             formatDate={formatDate}
                                             updateTodoDescription={updateTodoDescription}
+                                            updateTodoDate={updateTodoDate}
                                         />
                                     ))}
                                 </ul>
